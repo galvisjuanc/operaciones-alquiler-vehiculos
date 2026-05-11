@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "ms-vehiculos", url = "http://localhost:8080/api/vehiculos")
+@FeignClient(name = "ms-vehiculos")
 public interface VehiculoCliente {
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/vehiculos/{id}")
     VehiculoDTO obtenerPorId(@PathVariable int id);
 
-    @PutMapping("/{id}")
+    @PutMapping("/api/vehiculos/{id}")
     VehiculoDTO actualizar(@PathVariable int id, @RequestBody VehiculoDTO vehiculo);
 }
