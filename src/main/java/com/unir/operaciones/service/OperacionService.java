@@ -14,24 +14,40 @@ public class OperacionService {
     }
 
     public String procesarAlquiler(int vehiculoId) {
-        // 1. Consultar al otro microservicio
+
         VehiculoDTO vehiculo = vehiculoCliente.obtenerPorId(vehiculoId);
 
-        // 2. Validar disponibilidad
         if ("DISPONIBLE".equals(vehiculo.estado())) {
 
-            // 3. Crear nuevo objeto con estado cambiado (si usas records, creas uno nuevo)
             VehiculoDTO actualizado = new VehiculoDTO(
                     vehiculo.marca(), vehiculo.modelo(),
                     vehiculo.placa(), "NO_DISPONIBLE"
             );
 
-            // 4. Notificar al microservicio de vehículos la actualización
             vehiculoCliente.actualizar(vehiculoId, actualizado);
 
             return "Alquiler registrado con éxito.";
         }
 
         return "El vehículo no está disponible actualmente.";
+    }
+
+    public String cancelarAlquiler(int vehiculoId) {
+
+        VehiculoDTO vehiculoAlquilado = vehiculoCliente.obtenerPorId(vehiculoId);
+
+        if("NO_DISPONIBLE".equals(vehiculoAlquilado.estado())) {
+
+            VehiculoDTO actualizado = new VehiculoDTO(
+                    vehiculoAlquilado.marca(), vehiculoAlquilado.modelo(),
+                    vehiculoAlquilado.placa(), "DISPONIBLE"
+            );
+
+            vehiculoCliente.actualizar(vehiculoId, actualizado);
+
+            return "El alquiler ha sido cancelado. Vehiculo nuevamente disponible";
+        }
+
+        return "El vehiculo no ha sido alquilado.";
     }
 }
